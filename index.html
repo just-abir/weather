@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVZ3lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        #mainDiv {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        #searchMenu {
+            width: 100%;
+        }
+
+        #searchId {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        #searchId:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        #searchId::placeholder {
+            color: #bbb;
+        }
+
+        #weatherAllInformation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.5rem;
+        }
+
+        #locationName {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        #locationTime {
+            font-size: 0.9rem;
+            color: #ddd;
+            margin-bottom: 0.5rem;
+        }
+
+        #locationLogo {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0.5rem 0;
+        }
+
+        #locationLogo img {
+            height: 100%;
+            width: auto;
+        }
+
+        #locationTemparature {
+            font-size: 3rem;
+            font-weight: 300;
+            margin: 0.5rem 0;
+        }
+
+        #locationCondition {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #ddd;
+        }
+
+        #weatherExtraInfo,
+        #weatherSunInfo {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 1rem;
+        }
+
+        .extraInfo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 15px;
+            padding: 1rem;
+            flex: 1;
+            text-align: center;
+            min-height: 90px;
+        }
+
+        .extraInfo p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            #mainDiv {
+                padding: 1.25rem;
+                gap: 1.25rem;
+            }
+            
+            #locationTemparature {
+                font-size: 2.5rem;
+            }
+            
+            #locationLogo {
+                height: 100px;
+            }
+            
+            .extraInfo {
+                padding: 0.75rem;
+                min-height: 80px;
+            }
+            
+            .extraInfo p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #mainDiv {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            
+            #locationName {
+                font-size: 1.25rem;
+            }
+            
+            #locationTemparature {
+                font-size: 2.25rem;
+            }
+            
+            #locationCondition {
+                font-size: 1.1rem;
+            }
+            
+            #weatherExtraInfo,
+            #weatherSunInfo {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .extraInfo {
+                flex-direction: row;
+                justify-content: space-between;
+                min-height: auto;
+                padding: 0.75rem 1rem;
+            }
+            
+            .extraInfo p {
+                margin-top: 0;
+            }
+            
+            #locationLogo {
+                height: 90px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            #locationTemparature {
+                font-size: 2rem;
+            }
+            
+            #locationLogo {
+                height: 80px;
+            }
+            
+            .extraInfo {
+                padding: 0.6rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mainDiv">
+        <div id="searchMenu">
+            <input type="text" placeholder="Search Your City" id="searchId">
+        </div>
+
+        <div id="weatherAllInformation">
+            <h1 id="locationName">Dhaka, Bangladesh</h1>
+            <p id="locationTime">Tuesday October 2025 10:45 pm</p>
+            <div id="locationLogo">
+                <img src="http://openweathermap.org/img/wn/10d@4x.png" alt="Weather icon">
+            </div>
+            <h1 id="locationTemparature">23.4 &deg;C</h1>
+            <h3 id="locationCondition">Rain</h3>
+        </div>
+
+        <div id="weatherExtraInfo">
+            <div class="extraInfo" id="locationFeelsLike"> 
+                <span>Feels Like</span>
+                <p>24.1 &deg;C</p>
+            </div>
+            <div class="extraInfo" id="locationHumidity"> 
+                <span>Humidity</span>
+                <p>90 %</p>
+            </div>
+            <div class="extraInfo" id="locationWind"> 
+                <span>Wind</span>
+                <p>3.01 m/s</p>
+            </div>
+        </div>
+
+        <div id="weatherSunInfo">
+            <div class="extraInfo" id="sunRise">
+                <span>Sunrise</span>
+                <p>10:45 pm</p>
+            </div>
+            <div class="extraInfo" id="sunSet">
+                <span>Sunset</span>
+                <p>6:44 am</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var locatName = document.getElementById("locationName");
+        var locatTime = document.getElementById("locationTime");
+        var locatTemp = document.getElementById("locationTemparature");
+        var locatLogo = document.getElementById("locationLogo");
+        var locatCondit = document.getElementById("locationCondition");
+        var locatFeel = document.getElementById("locationFeelsLike");
+        var locatHum = document.getElementById("locationHumidity");
+        var locatWind = document.getElementById("locationWind");
+        var locatSunRise = document.getElementById("sunRise");
+        var locatSunSet = document.getElementById("sunSet");
+
+        var searchBtn = document.getElementById("searchId");
+        let city = "Dhaka"; 
+
+        searchBtn.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                if (searchBtn.value.trim() !== "") { 
+                    city = searchBtn.value;
+                    console.log(city);
+                    getWeatherInfo();
+                    searchBtn.value = "";
+                }
+            }
+        })
+
+        var getTimeSun = (x) => {
+            let date = new Date(x * 1000);
+            let formatted = date.toLocaleString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+            return formatted;
+        }
+
+        var getCountry = (x) => {
+            try {
+                return new Intl.DisplayNames(['en'], { type: 'region' }).of(x);
+            } catch (error) {
+                return x; 
+            }
+        }
+
+        var getTimeInfo = (x) => {
+            let date = new Date(x * 1000);
+            let formatted = date.toLocaleString('en-GB', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+            return formatted;
+        }
+
+        async function getWeatherInfo() {
+            let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=7db324be56f87d69080b80bc66682bcd`;
+
+            try {
+                console.log("Fetching weather for:", city);
+                var result = await fetch(url);
+                
+                if (!result.ok) {
+                    throw new Error(`City not found or API error: ${result.status}`);
+                }
+
+                var data = await result.json();
+                console.log(data);
+
+                locatName.innerHTML = `${data.name},  ${getCountry(data.sys.country)}`;
+                locatTime.innerHTML = getTimeInfo(data.dt);
+                locatTemp.innerHTML = `${(data.main.temp - 273.15).toFixed(2)} &deg;C`;
+                locatCondit.innerHTML = data.weather[0].main;
+                locatLogo.innerHTML = `<img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" alt="${data.weather[0].description}" />`;
+
+                locatFeel.innerHTML = `<span>Feels Like</span><p>${(data.main.feels_like - 273.15).toFixed(2)} &deg;C</p>`;
+                locatHum.innerHTML = `<span>Humidity</span><p>${data.main.humidity} %</p>`;
+                locatWind.innerHTML = `<span>Wind</span><p>${data.wind.speed} m/s</p>`;
+                locatSunRise.innerHTML = `<span>Sunrise</span><p>${getTimeSun(data.sys.sunrise)}</p>`;
+                locatSunSet.innerHTML = `<span>Sunset</span><p>${getTimeSun(data.sys.sunset)}</p>`;
+
+            } catch (error) {
+                console.error("Error in URL", error);
+                locatName.innerHTML = "City not found";
+                locatTime.innerHTML = "Please try searching again";
+                locatTemp.innerHTML = "- &deg;C";
+                locatCondit.innerHTML = "Error";
+                locatLogo.innerHTML = "";
+                locatFeel.innerHTML = `<span>Feels Like</span><p>- &deg;C</p>`;
+                locatHum.innerHTML = `<span>Humidity</span><p>- %</p>`;
+                locatWind.innerHTML = `<span>Wind</span><p>- m/s</p>`;
+                locatSunRise.innerHTML = `<span>Sunrise</span><p>-</p>`;
+                locatSunSet.innerHTML = `<span>Sunset</span><p>-</p>`;
+            }
+        }
+
+        getWeatherInfo();
+    </script>
+</body>
+
+</html>
